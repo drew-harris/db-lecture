@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { userRouter } from "./routers/userRouter.js";
+import { tasksRouter } from "./routers/tasksRouter.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
+app.use("/tasks", tasksRouter);
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");

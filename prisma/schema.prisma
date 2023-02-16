@@ -16,4 +16,15 @@ model User {
   password String
 
   isMod Boolean @default(false)
+
+  tasks Task[]
+}
+
+model Task {
+  id       String  @id @default(uuid())
+  title    String
+  complete Boolean
+
+  User     User   @relation(fields: [userId], references: [id])
+  userId   String
 }
