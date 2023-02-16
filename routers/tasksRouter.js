@@ -18,31 +18,44 @@ tasksRouter.use((req, res, next) => {
 });
 
 tasksRouter.post("/", async (req, res) => {
-  console.log("BODY: ", req.body);
-  console.log("USER: ", req.user);
+  try {
+    console.log("BODY: ", req.body);
+    console.log("USER: ", req.user);
 
-  const task = await prisma.task.create({
-    data: {
-      title: req.body.title,
-      User: {
-        connect: {
-          id: req.user.id,
+    const task = await prisma.task.create({
+      data: {
+        title: req.body.title,
+        User: {
+          connect: {
+            id: req.user.id,
+          },
         },
+        complete: false,
       },
-      complete: false,
-    },
-  });
+    });
 
-  res.json({ task });
+    res.json({ task });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "There was an error", error: error.message });
+  }
 });
 
 tasksRouter.get("/", async (req, res) => {
-  const tasks = await prisma.task.findMany({
-    where: {
-      userId: req.user.id,
-    },
-  });
-  res.json({ tasks });
+  try {
+    const tasks = await prisma.task.findMany({
+      where: {
+        userId: req.user.id,
+      },
+    });
+    res.json({ tasks });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "There was an error", error: error.message });
+  }
 });
 
 export { tasksRouter };
