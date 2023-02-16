@@ -36,4 +36,13 @@ tasksRouter.post("/", async (req, res) => {
   res.json({ task });
 });
 
+tasksRouter.get("/", async (req, res) => {
+  const tasks = await prisma.task.findMany({
+    where: {
+      userId: req.user.id,
+    },
+  });
+  res.json({ tasks });
+});
+
 export { tasksRouter };
