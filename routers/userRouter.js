@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import prisma from "../db.js";
 
 const userRouter = express.Router();
 
@@ -22,7 +23,14 @@ userRouter.post("/signup", async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, salt);
   console.log(hash);
 
-  return res.json({ message: "User Created" });
+  const user = await prisma.user.create({
+    data: {
+      password: hash,
+      email: req.body.email,
+    },
+  });
+
+  return res.json({ user });
 });
 
 export { userRouter };
