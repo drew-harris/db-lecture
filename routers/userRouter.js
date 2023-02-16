@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import prisma from "../db.js";
 
 const userRouter = express.Router();
@@ -30,7 +31,13 @@ userRouter.post("/signup", async (req, res) => {
     },
   });
 
-  return res.json({ user });
+  const { password, ...rest } = user;
+
+  const token = jwt.sign(rest, process.env.JWT_SECRET, {
+    expiresIn: "12d",
+  });
+
+  return res.json({ token });
 });
 
 export { userRouter };
