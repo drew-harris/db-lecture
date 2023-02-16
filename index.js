@@ -3,6 +3,8 @@ import express from "express";
 const app = express();
 
 app.get("/", (req, res) => {
+  console.log("Recieved request");
+  console.log("Recieved request");
   return res.json({ message: "Hello" });
 });
 
